@@ -1,3 +1,5 @@
+const { DbProducts } = require("../Models/Models");
+
 const Products = require("../Models/Models").DbProducts;
 
 module.exports = {
@@ -11,9 +13,22 @@ module.exports = {
 
       return res
         .status(200)
-        .json({ message: "Done Products", Product: products });
+        .json({ message: "Done Products", Products: products });
     } catch (err) {
       return res.status(400).json({ message: "Error  " + err });
+    }
+  },
+  GetByID: async (req, res) => {
+    const id = req.params.id;
+
+    try {
+      const ProductById = await DbProducts.findById({ _id: id });
+      if (!ProductById) {
+        res.status(400).json({ message: "Not Found Product " });
+      }
+      res.status(200).json({ message: "Found one", Product: ProductById });
+    } catch (err) {
+      res.status(400).json({ message: "Error  " + err });
     }
   },
 };

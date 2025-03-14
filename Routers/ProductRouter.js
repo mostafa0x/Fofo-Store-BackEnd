@@ -3,6 +3,13 @@ const Checkdb = require("../Middlewares/CheckDB");
 const CheckToken = require("../Middlewares/CheckToken");
 const ProductControlles = require("../Controllers/ProductControllers");
 
-ProductRouter.get("/", Checkdb, CheckToken, ProductControlles.index);
+ProductRouter.get("/Products", Checkdb, CheckToken, ProductControlles.index);
+
+ProductRouter.get(
+  "/Product/:id",
+  Checkdb,
+  CheckToken,
+  ProductControlles.GetByID
+);
 
 module.exports = ProductRouter;
