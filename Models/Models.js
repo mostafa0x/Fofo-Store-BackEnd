@@ -17,8 +17,42 @@ const SchemaCart = new mongoose.Schema({
   },
 });
 
+const SchemaProducts = new mongoose.Schema({
+  title: {
+    type: String,
+    required: true,
+  },
+  description: {
+    type: String,
+    required: true,
+  },
+  price: {
+    type: String,
+    required: true,
+  },
+  category: {
+    id: {
+      type: String,
+      required: true,
+    },
+    name: {
+      type: String,
+      required: true,
+    },
+    image: {
+      type: String,
+      required: true,
+    },
+  },
+  images: {
+    type: Array,
+    required: true,
+  },
+});
+
 const DbUsers = mongoose.model("users", SchemaUser);
 const DbCarts = mongoose.model("Carts", SchemaCart);
+const DbProducts = mongoose.model("products", SchemaProducts);
 
 mongoose
   .connect(mongooesURL)
@@ -29,4 +63,4 @@ mongoose
     console.log("Erro " + err);
   });
 
-module.exports = { DbUsers, DbCarts };
+module.exports = { DbUsers, DbCarts, DbProducts };
