@@ -18,6 +18,10 @@ const SchemaCart = new mongoose.Schema({
 });
 
 const SchemaProducts = new mongoose.Schema({
+  id: {
+    type: Number,
+    required: true,
+  },
   title: {
     type: String,
     required: true,

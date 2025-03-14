@@ -19,16 +19,24 @@ module.exports = {
     }
   },
   GetByID: async (req, res) => {
-    const id = req.params.id;
+    const id = parseInt(req.params.id);
+
+    if (typeof id !== "number" || isNaN(id)) {
+      return res.status(400).json({ message: "The ID must be numbers." });
+    }
 
     try {
-      const ProductById = await DbProducts.findById({ _id: id });
+      const ProductById = await DbProducts.findOne({ id: id });
       if (!ProductById) {
-        res.status(400).json({ message: "Not Found Product " });
+        return res
+          .status(400)
+          .json({ message: "There is no product with this ID." });
       }
-      res.status(200).json({ message: "Found one", Product: ProductById });
+      return res
+        .status(200)
+        .json({ message: "Found one", Product: ProductById });
     } catch (err) {
-      res.status(400).json({ message: "Error  " + err });
+      return res.status(400).json({ message: "Error  " + err });
     }
   },
 };
