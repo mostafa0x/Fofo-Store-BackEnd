@@ -38,52 +38,49 @@ module.exports = {
   },
   AddToCart: async (req, res) => {
     const userId = req.users.sub;
-    const ProdcutID = req.body.productID;
+    const productID = req.body.productID;
 
-    if (!ProdcutID) {
-      return res.status(400).json({ message: "Error to Found ProductID" });
+    if (!productID) {
+      return res.status(400).json({ message: "ProductID is required." });
     }
+
     try {
-      const Product = await Products.findOne({ id: ProdcutID });
-      if (!Product) {
-        return res
-          .status(404)
-          .json({ messsage: "There is no product with this ID." });
+      const product = await Products.findOne({ id: productID });
+      if (!product) {
+        return res.status(404).json({ message: "Product not found." });
       }
 
-      const FindCart = await Cart.findOne({ id: userId });
-      if (!FindCart) {
-        var ObjCart = [];
-      } else {
-        var ObjCart = FindCart.Cart.MyCart;
-      }
+      let cart = await Cart.findOne({ id: userId });
+      let cartItems = cart ? cart.Cart.MyCart : [];
 
-      ObjCart.push(Product);
-      const Totalprice = await TotalPriceItems(ObjCart);
+      cartItems.push(product);
+      const totalPrice = await TotalPriceItems(cartItems);
 
-      const Add = await Cart.updateOne(
+      const updateResult = await Cart.updateOne(
         { id: userId },
-        { Cart: { MyCart: ObjCart, Totalprice } }
+        { Cart: { MyCart: cartItems, Totalprice: totalPrice } }
       );
 
-      if (Add.matchedCount === 0) {
-        const newOne = await Cart.insertOne({
+      if (updateResult.matchedCount === 0) {
+        await Cart.insertOne({
           id: userId,
-          Cart: { MyCart: ObjCart, Totalprice },
+          Cart: { MyCart: cartItems, Totalprice: totalPrice },
         });
 
         return res.status(201).json({
-          message: "New Cart",
-          Cart: { MyCart: ObjCart, Totalprice },
+          message: "New cart created.",
+          Cart: { MyCart: cartItems, Totalprice: totalPrice },
         });
       }
 
       return res.status(200).json({
-        message: "Add To Cart",
-        Cart: { MyCart: ObjCart, Totalprice: Totalprice },
+        message: "Product added to cart.",
+        Cart: { MyCart: cartItems, Totalprice: totalPrice },
       });
     } catch (err) {
-      res.status(400).json({ message: "Error  " + err });
+      return res
+        .status(500)
+        .json({ message: `Error occurred: ${err.message}` });
     }
   },
 };
