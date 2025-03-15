@@ -118,28 +118,43 @@ module.exports = {
   },
   UpdateCount: async (req, res) => {
     const userId = req.users.sub;
-    const ProductID = req.body.productID;
+    const { productID } = req.body;
 
-    if (!ProductID) {
-      return res.status(400).json({ message: "ProductID is required" });
+    if (!productID) {
+      return res.status(400).json({ message: "productID is required" });
     }
 
     try {
       const updateCount = await Cart.findOneAndUpdate(
         {
           id: userId,
-          "Cart.MyCart.id": ProductID,
+          "Cart.MyCart.id": productID,
         },
-        { $inc: { "Cart.MyCart.$.count": -1 } },
+        {
+          $inc: { "Cart.MyCart.$.count": -1, "Cart.Totalprice": -250 },
+        },
         { new: true }
       );
       if (!updateCount) {
         return res.status(400).json({ message: "Product Not Found in Cart" });
       }
 
-      res
-        .status(200)
-        .json({ message: "updated Count", Cart: updateCount.Cart });
+      const Product = updateCount.Cart.MyCart.find(
+        (product) => product.id == productID
+      );
+
+      if (Product.count <= 0) {
+        const FinalData = await Cart.updateOne(
+          { id: userId },
+          {
+            $pull: { "Cart.MyCart": { id: productID } },
+            $inc: { "Cart.Totalprice": -Product.price },
+          }
+        );
+        console.log(FinalData);
+      }
+
+      res.status(200).json({ message: "updated Count" });
     } catch (err) {
       res.status(500).json({ message: `Error  ${err}` });
     }
