@@ -11,9 +11,19 @@ const SchemaUser = new mongoose.Schema({
 });
 
 const SchemaCart = new mongoose.Schema({
-  userId: {
-    type: String,
+  id: {
+    type: Number,
     required: true,
+  },
+  Cart: {
+    MyCart: {
+      type: Array,
+      required: true,
+    },
+    Totalprice: {
+      type: Number,
+      required: true,
+    },
   },
 });
 

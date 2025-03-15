@@ -6,7 +6,7 @@ async function CheckToken(req, res, next) {
   const token = req.header("Authorization")?.replace("Bearer ", "");
 
   if (!token) {
-    return res.status(401).json({ message: "Token is required" });
+    return res.status(401).json({ message: "You must login first !" });
   }
 
   try {
