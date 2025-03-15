@@ -16,10 +16,7 @@ const SchemaCart = new mongoose.Schema({
     required: true,
   },
   Cart: {
-    MyCart: {
-      type: Array,
-      required: true,
-    },
+    MyCart: { type: Array, required: true },
     Totalprice: {
       type: Number,
       required: true,
@@ -62,6 +59,7 @@ const SchemaProducts = new mongoose.Schema({
     type: Array,
     required: true,
   },
+  count: { type: Number, requird: true },
 });
 
 const DbUsers = mongoose.model("users", SchemaUser);
