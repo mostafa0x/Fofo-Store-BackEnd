@@ -125,13 +125,21 @@ module.exports = {
     }
 
     try {
+      const Cartx = await Cart.findOne({ id: userId });
+      const SelectProduct = Cartx.Cart.MyCart.find(
+        (item) => item.id == productID
+      );
+
       const updateCount = await Cart.findOneAndUpdate(
         {
           id: userId,
           "Cart.MyCart.id": productID,
         },
         {
-          $inc: { "Cart.MyCart.$.count": -1, "Cart.Totalprice": -250 },
+          $inc: {
+            "Cart.MyCart.$.count": -1,
+            "Cart.Totalprice": -parseInt(SelectProduct.price),
+          },
         },
         { new: true }
       );
@@ -144,17 +152,16 @@ module.exports = {
       );
 
       if (Product.count <= 0) {
-        const FinalData = await Cart.updateOne(
+        var FinalData = await Cart.findOneAndUpdate(
           { id: userId },
           {
             $pull: { "Cart.MyCart": { id: productID } },
-            $inc: { "Cart.Totalprice": -Product.price },
-          }
+          },
+          { new: true }
         );
-        console.log(FinalData);
       }
 
-      res.status(200).json({ message: "updated Count" });
+      res.status(200).json({ message: "updated Count", Cart: FinalData.Cart });
     } catch (err) {
       res.status(500).json({ message: `Error  ${err}` });
     }
