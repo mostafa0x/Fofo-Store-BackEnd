@@ -1,15 +1,6 @@
 const Cart = require("../Models/Models").DbCarts;
 const Products = require("../Models/Models").DbProducts;
-
-async function TotalPriceItems(CartItems) {
-  const VirtualCart = CartItems;
-  let Total = 0;
-
-  VirtualCart.map((item) => {
-    Total += parseInt(item.price * item.count);
-  });
-  return parseInt(Total);
-}
+const TotalPrice = require("../Functions/TotalPriceCart");
 
 module.exports = {
   index: async (req, res) => {
@@ -64,7 +55,7 @@ module.exports = {
         cartItems.push(product);
       }
 
-      let totalPrice = await TotalPriceItems(cartItems);
+      let totalPrice = await TotalPrice(cartItems);
       if (isNaN(totalPrice)) {
         totalPrice = 0;
       }
