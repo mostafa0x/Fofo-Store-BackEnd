@@ -125,10 +125,13 @@ module.exports = {
     }
 
     try {
-      const Cartx = await Cart.findOne({ id: userId });
-      const SelectProduct = Cartx.Cart.MyCart.find(
+      const cart = await Cart.findOne({ id: userId });
+      const SelectProduct = cart.Cart.MyCart.find(
         (item) => item.id == productID
       );
+      if (!SelectProduct) {
+        return res.status(400).json({ message: "Product Not Found in Cart" });
+      }
 
       const updateCount = await Cart.findOneAndUpdate(
         {
@@ -159,9 +162,16 @@ module.exports = {
           },
           { new: true }
         );
+        return res.status(200).json({
+          message: "The product has been deleted",
+          Cart: FinalData.Cart,
+        });
       }
 
-      res.status(200).json({ message: "updated Count", Cart: FinalData.Cart });
+      res.status(200).json({
+        message: "The product quantity has been modified.",
+        Cart: FinalData.Cart,
+      });
     } catch (err) {
       res.status(500).json({ message: `Error  ${err}` });
     }
