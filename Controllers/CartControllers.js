@@ -48,19 +48,22 @@ module.exports = {
         return res.status(404).json({ message: "Product not found." });
       }
       const proudctID = product?.id;
+      product.count = 1;
+      let CountProduct = 1;
       let cart = await Cart.findOne({ id: userId });
       let cartItems = cart ? cart.Cart.MyCart : [];
-      let CountProduct = product.count ? product.count : 1;
-      product.count = CountProduct;
-      let EditORPush = 0;
-      cartItems.map((product) => {
-        if (proudctID === product.id) {
-          product.count = CountProduct + 1;
-          EditORPush = 1;
+      let PushOrEdit = 0;
+      cartItems.map((itemCart) => {
+        if (proudctID == itemCart.id) {
+          CountProduct = itemCart.count;
+          itemCart.count = CountProduct + 1;
+          PushOrEdit = 1;
         }
       });
-      EditORPush === 0 ? cartItems.push(product) : null;
-      const Totalprice = await TotalPriceItems(cartItems);
+
+      PushOrEdit === 0 ? cartItems.push(product) : null;
+      let Totalprice = await TotalPriceItems(cartItems);
+      isNaN(Totalprice) ? (Totalprice = 0) : null;
 
       const updateResult = await Cart.updateOne(
         { id: userId },
