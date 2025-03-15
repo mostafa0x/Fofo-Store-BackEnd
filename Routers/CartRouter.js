@@ -7,4 +7,11 @@ CartRouter.get("/Cart", Checkdb, CheckToken, CartControllers.index);
 
 CartRouter.post("/Cart", Checkdb, CheckToken, CartControllers.addProductToCart);
 
+CartRouter.delete(
+  "/Cart",
+  Checkdb,
+  CheckToken,
+  CartControllers.RemoveProductFromCart
+);
+
 module.exports = CartRouter;

@@ -1,5 +1,6 @@
 const Cart = require("../Models/Models").DbCarts;
 const Products = require("../Models/Models").DbProducts;
+const TotalPriceItems = require("../Functions/TotalPriceCart");
 const TotalPrice = require("../Functions/TotalPriceCart");
 
 module.exports = {
@@ -82,6 +83,37 @@ module.exports = {
       });
     } catch (err) {
       return res.status(500).json({ message: `Error: ${err.message}` });
+    }
+  },
+  RemoveProductFromCart: async (req, res) => {
+    const userId = req.users.sub;
+    const ProductIDonCart = req.body.productID;
+
+    try {
+      const ProductWillDelete = await Cart.updateOne(
+        { id: userId, "Cart.MyCart.id": ProductIDonCart },
+        { $pull: { "Cart.MyCart": { id: ProductIDonCart } } }
+      );
+
+      if (ProductWillDelete.modifiedCount === 0) {
+        return res.status(400).json({ message: "Not Found Product in Cart" });
+      }
+      let Data = await Cart.findOne({ id: userId });
+      const Total = await TotalPrice(Data.Cart.MyCart);
+      const update = await Cart.updateOne(
+        { id: userId },
+        {
+          $set: {
+            "Cart.Totalprice": Total,
+          },
+        }
+      );
+      Data = await Cart.findOne({ id: userId });
+      return res
+        .status(200)
+        .json({ message: "Product Deleted from Cart", Cart: Data.Cart });
+    } catch (err) {
+      res.status(500).json({ message: `Error ${err}` });
     }
   },
 };
