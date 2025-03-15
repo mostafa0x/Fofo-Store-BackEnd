@@ -34,76 +34,63 @@ module.exports = {
       return res.status(400).json({ message: "Error  " + err });
     }
   },
-  AddToCart: async (req, res) => {
+  addProductToCart: async (req, res) => {
     const userId = req.users.sub;
     const productID = req.body.productID;
+    let productFoundInCart = false;
 
     if (!productID || typeof productID !== "number") {
       return res.status(400).json({ message: "ProductID is required." });
     }
 
     try {
-      let product = await Products.findOne({ id: productID });
+      const product = await Products.findOne({ id: productID });
       if (!product) {
         return res.status(404).json({ message: "Product not found." });
       }
-      const proudctID = product?.id;
-      product.count = 1;
-      let CountProduct = 1;
+
       let cart = await Cart.findOne({ id: userId });
       let cartItems = cart ? cart.Cart.MyCart : [];
-      let PushOrEdit = 0;
-      cartItems.map((itemCart) => {
-        if (proudctID == itemCart.id) {
-          CountProduct = itemCart.count;
-          itemCart.count = CountProduct + 1;
-          PushOrEdit = 1;
+
+      cartItems.forEach((itemCart) => {
+        if (itemCart.id === productID) {
+          itemCart.count += 1;
+          productFoundInCart = true;
         }
       });
 
-      PushOrEdit === 0 ? cartItems.push(product) : null;
-      let Totalprice = await TotalPriceItems(cartItems);
-      isNaN(Totalprice) ? (Totalprice = 0) : null;
+      if (!productFoundInCart) {
+        product.count = 1;
+        cartItems.push(product);
+      }
 
-      const updateResult = await Cart.updateOne(
+      let totalPrice = await TotalPriceItems(cartItems);
+      if (isNaN(totalPrice)) {
+        totalPrice = 0;
+      }
+
+      const updateResult = await Cart.findOneAndUpdate(
         { id: userId },
         {
           Cart: {
             MyCart: cartItems,
-            Totalprice,
+            Totalprice: totalPrice,
           },
-        }
+        },
+        { upsert: true, new: true }
       );
 
-      if (updateResult.matchedCount === 0) {
-        await Cart.insertOne({
-          id: userId,
-          Cart: {
-            MyCart: cartItems,
-            Totalprice,
-          },
-        });
-
-        return res.status(201).json({
-          message: "New cart created.",
-          Cart: {
-            MyCart: cartItems,
-            Totalprice,
-          },
-        });
-      }
-
-      return res.status(200).json({
-        message: "Product added to cart.",
+      return res.status(updateResult ? 200 : 201).json({
+        message: productFoundInCart
+          ? "Product quantity updated."
+          : "Product added to cart.",
         Cart: {
           MyCart: cartItems,
-          Totalprice,
+          Totalprice: totalPrice,
         },
       });
     } catch (err) {
-      return res
-        .status(500)
-        .json({ message: `Error occurred: ${err.message}` });
+      return res.status(500).json({ message: `Error: ${err.message}` });
     }
   },
 };

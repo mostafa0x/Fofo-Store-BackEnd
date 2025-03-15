@@ -5,6 +5,6 @@ const CheckToken = require("../Middlewares/CheckToken");
 
 CartRouter.get("/Cart", Checkdb, CheckToken, CartControllers.index);
 
-CartRouter.post("/Cart", Checkdb, CheckToken, CartControllers.AddToCart);
+CartRouter.post("/Cart", Checkdb, CheckToken, CartControllers.addProductToCart);
 
 module.exports = CartRouter;
