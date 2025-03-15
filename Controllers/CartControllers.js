@@ -116,4 +116,32 @@ module.exports = {
       res.status(500).json({ message: `Error ${err}` });
     }
   },
+  UpdateCount: async (req, res) => {
+    const userId = req.users.sub;
+    const ProductID = req.body.productID;
+
+    if (!ProductID) {
+      return res.status(400).json({ message: "ProductID is required" });
+    }
+
+    try {
+      const updateCount = await Cart.findOneAndUpdate(
+        {
+          id: userId,
+          "Cart.MyCart.id": ProductID,
+        },
+        { $inc: { "Cart.MyCart.$.count": -1 } },
+        { new: true }
+      );
+      if (!updateCount) {
+        return res.status(400).json({ message: "Product Not Found in Cart" });
+      }
+
+      res
+        .status(200)
+        .json({ message: "updated Count", Cart: updateCount.Cart });
+    } catch (err) {
+      res.status(500).json({ message: `Error  ${err}` });
+    }
+  },
 };

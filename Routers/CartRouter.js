@@ -7,6 +7,8 @@ CartRouter.get("/Cart", Checkdb, CheckToken, CartControllers.index);
 
 CartRouter.post("/Cart", Checkdb, CheckToken, CartControllers.addProductToCart);
 
+CartRouter.patch("/Cart", Checkdb, CheckToken, CartControllers.UpdateCount);
+
 CartRouter.delete(
   "/Cart",
   Checkdb,
