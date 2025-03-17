@@ -1,7 +1,5 @@
 const Cart = require("../Models/Models").DbCarts;
 const Products = require("../Models/Models").DbProducts;
-const { log } = require("console");
-const TotalPriceItems = require("../Functions/TotalPriceCart");
 const TotalPrice = require("../Functions/TotalPriceCart");
 
 module.exports = {
@@ -194,7 +192,7 @@ module.exports = {
       }
       return res
         .status(200)
-        .json({ message: "The shopping cart has been deleted." });
+        .json({ message: "The shopping cart has been deleted" });
     } catch (err) {
       return res.status(500).json({ message: `Error   ${err}` });
     }
