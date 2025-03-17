@@ -87,7 +87,11 @@ module.exports = {
   },
   RemoveProductFromCart: async (req, res) => {
     const userId = req.users.sub;
-    const ProductIDonCart = req.body.productID;
+    const ProductIDonCart = parseInt(req.params.id);
+
+    if (!ProductIDonCart) {
+      return res.status(400).json({ message: "Product Id Not found" });
+    }
 
     try {
       const ProductWillDelete = await Cart.updateOne(
@@ -158,7 +162,7 @@ module.exports = {
       );
 
       if (Product.count <= 0) {
-        var FinalData = await Cart.findOneAndUpdate(
+        let FinalData = await Cart.findOneAndUpdate(
           { id: userId },
           {
             $pull: { "Cart.MyCart": { id: productID } },

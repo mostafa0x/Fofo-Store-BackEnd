@@ -10,7 +10,7 @@ CartRouter.post("/Cart", Checkdb, CheckToken, CartControllers.addProductToCart);
 CartRouter.patch("/Cart", Checkdb, CheckToken, CartControllers.UpdateCount);
 
 CartRouter.delete(
-  "/Cart",
+  "/Cart/:id",
   Checkdb,
   CheckToken,
   CartControllers.RemoveProductFromCart
