@@ -62,9 +62,16 @@ const SchemaProducts = new mongoose.Schema({
   count: { type: Number, requird: true },
 });
 
+const SchemaCategorie = new mongoose.Schema({
+  id: Number,
+  name: String,
+  image: String,
+});
+
 const DbUsers = mongoose.model("users", SchemaUser);
-const DbCarts = mongoose.model("Carts", SchemaCart);
+const DbCarts = mongoose.model("carts", SchemaCart);
 const DbProducts = mongoose.model("products", SchemaProducts);
+const DbCategories = mongoose.model("categories", SchemaCategorie);
 
 mongoose
   .connect(mongooesURL)
@@ -75,4 +82,4 @@ mongoose
     console.log("Erro " + err);
   });
 
-module.exports = { DbUsers, DbCarts, DbProducts };
+module.exports = { DbUsers, DbCarts, DbProducts, DbCategories };

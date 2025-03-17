@@ -19,7 +19,13 @@ app.use(methodOverride("X-HTTP-Method-Override"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.use("/", Router.appRouter, Router.CartRouter, Router.ProductRouter);
+app.use(
+  "/",
+  Router.appRouter,
+  Router.CartRouter,
+  Router.ProductRouter,
+  Router.CategoriesRouter
+);
 
 app.listen(PORT, () => {
   console.log(`Server Working on ${PORT}`);
