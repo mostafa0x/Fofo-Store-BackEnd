@@ -176,4 +176,5 @@ module.exports = {
       res.status(500).json({ message: `Error  ${err}` });
     }
   },
+  DeleteCart: async (req, res) => {},
 };
