@@ -16,4 +16,6 @@ CartRouter.delete(
   CartControllers.RemoveProductFromCart
 );
 
+CartRouter.delete("/AllCart", Checkdb, CheckToken, CartControllers.DeleteCart);
+
 module.exports = CartRouter;

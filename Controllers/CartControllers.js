@@ -1,5 +1,6 @@
 const Cart = require("../Models/Models").DbCarts;
 const Products = require("../Models/Models").DbProducts;
+const { log } = require("console");
 const TotalPriceItems = require("../Functions/TotalPriceCart");
 const TotalPrice = require("../Functions/TotalPriceCart");
 
@@ -183,5 +184,19 @@ module.exports = {
       res.status(500).json({ message: `Error  ${err}` });
     }
   },
-  DeleteCart: async (req, res) => {},
+  DeleteCart: async (req, res) => {
+    const userId = req.users.sub;
+
+    try {
+      const cart = await Cart.findOneAndDelete({ id: userId });
+      if (!cart) {
+        return res.status(400).json({ message: "Shopping cart not found" });
+      }
+      return res
+        .status(200)
+        .json({ message: "The shopping cart has been deleted." });
+    } catch (err) {
+      return res.status(500).json({ message: `Error   ${err}` });
+    }
+  },
 };
