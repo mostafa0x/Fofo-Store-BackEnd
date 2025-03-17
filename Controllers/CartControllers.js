@@ -99,6 +99,7 @@ module.exports = {
         return res.status(400).json({ message: "Not Found Product in Cart" });
       }
       let Data = await Cart.findOne({ id: userId });
+
       const Total = await TotalPrice(Data.Cart.MyCart);
       const update = await Cart.updateOne(
         { id: userId },
@@ -109,6 +110,7 @@ module.exports = {
         }
       );
       Data = await Cart.findOne({ id: userId });
+
       return res
         .status(200)
         .json({ message: "Product Deleted from Cart", Cart: Data.Cart });
@@ -146,6 +148,7 @@ module.exports = {
         },
         { new: true }
       );
+
       if (!updateCount) {
         return res.status(400).json({ message: "Product Not Found in Cart" });
       }
@@ -170,7 +173,7 @@ module.exports = {
 
       res.status(200).json({
         message: "The product quantity has been modified.",
-        Cart: FinalData.Cart,
+        Cart: updateCount.Cart,
       });
     } catch (err) {
       res.status(500).json({ message: `Error  ${err}` });
