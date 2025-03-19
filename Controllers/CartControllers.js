@@ -140,7 +140,9 @@ module.exports = {
       if (!SelectProduct) {
         return res.status(400).json({ message: "Product Not Found in Cart" });
       }
-
+      const itemPir =
+        SelectProduct.price -
+        SelectProduct.price * (SelectProduct.DisPercentage / 100);
       const updateCount = await Cart.findOneAndUpdate(
         {
           id: userId,
@@ -149,7 +151,7 @@ module.exports = {
         {
           $inc: {
             "Cart.MyCart.$.count": -1,
-            "Cart.Totalprice": -parseInt(SelectProduct.price),
+            "Cart.Totalprice": -itemPir,
           },
         },
         { new: true }
