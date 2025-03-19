@@ -60,6 +60,14 @@ const SchemaProducts = new mongoose.Schema({
     required: true,
   },
   count: { type: Number, requird: true },
+  stock: {
+    type: Number,
+    required: true,
+  },
+  DisPercentage: {
+    type: Number,
+    required: true,
+  },
 });
 
 const SchemaCategorie = new mongoose.Schema({

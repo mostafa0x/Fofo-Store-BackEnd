@@ -39,6 +39,9 @@ module.exports = {
       if (!product) {
         return res.status(404).json({ message: "Product not found." });
       }
+      if (product.stock <= 0) {
+        return res.status(402).json({ message: "Out of stock" });
+      }
 
       let cart = await Cart.findOne({ id: userId });
       let cartItems = cart ? cart.Cart.MyCart : [];

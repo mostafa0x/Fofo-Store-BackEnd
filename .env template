@@ -1,5 +1,5 @@
-PORT=3001
-MongooseURL=''
-ClientID = ''
-ClientKey = ''
-NEXTAUTH_SECRET = ''
+PORT = 3001;
+MongooseURL = "";
+ClientID = ""; //google
+ClientKey = ""; //google
+NEXTAUTH_SECRET = "";
