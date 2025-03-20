@@ -140,9 +140,10 @@ module.exports = {
       if (!SelectProduct) {
         return res.status(400).json({ message: "Product Not Found in Cart" });
       }
-      const itemPir =
+      const itemPir = Math.ceil(
         SelectProduct.price -
-        SelectProduct.price * (SelectProduct.DisPercentage / 100);
+          SelectProduct.price * (SelectProduct.DisPercentage / 100)
+      );
       const updateCount = await Cart.findOneAndUpdate(
         {
           id: userId,

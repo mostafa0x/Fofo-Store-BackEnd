@@ -24,7 +24,8 @@ app.use(
   Router.appRouter,
   Router.CartRouter,
   Router.ProductRouter,
-  Router.CategoriesRouter
+  Router.CategoriesRouter,
+  Router.DashboardRouter
 );
 
 app.listen(PORT, () => {
