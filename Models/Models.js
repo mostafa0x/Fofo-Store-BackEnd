@@ -59,7 +59,7 @@ const SchemaProducts = new mongoose.Schema({
     type: Array,
     required: true,
   },
-  count: { type: Number, requird: true },
+  count: { type: Number },
   stock: {
     type: Number,
     required: true,
