@@ -3,3 +3,4 @@ MongooseURL = "";
 ClientID = ""; //google
 ClientKey = ""; //google
 NEXTAUTH_SECRET = "";
+IMGUR_CLIENT_ID = 'YOUR_IMGUR_CLIENT_ID';

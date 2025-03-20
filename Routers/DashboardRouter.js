@@ -2,7 +2,16 @@ const DashBoardRouter = require("express").Router();
 const Checkdb = require("../Middlewares/CheckDB");
 const CheckToken = require("../Middlewares/CheckToken");
 const DashBoardControlers = require("../Controllers/DashboardControllers");
+const Multer = require("multer");
 
-DashBoardRouter.post("/", Checkdb, DashBoardControlers.index);
+const storage = Multer.memoryStorage();
+const upload = Multer({ storage: storage });
+
+DashBoardRouter.post(
+  "/admin/product",
+  upload.single("image"),
+  Checkdb,
+  DashBoardControlers.AddProduct
+);
 
 module.exports = DashBoardRouter;
