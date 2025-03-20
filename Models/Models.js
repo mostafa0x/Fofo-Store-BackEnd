@@ -43,7 +43,7 @@ const SchemaProducts = new mongoose.Schema({
   },
   category: {
     id: {
-      type: String,
+      type: Number,
       required: true,
     },
     name: {

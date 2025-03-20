@@ -10,11 +10,11 @@ module.exports = {
   AddProduct: async (req, res) => {
     const { title, description, price, category, DisPercentage, stock } =
       req.body;
+    const NEWcategory = JSON.parse(category);
     try {
       if (!req.file) {
         return res.status(400).json({ message: "file not found" });
       }
-      console.log(category);
 
       const form = new formdata();
       form.append("image", req.file.buffer);
@@ -34,7 +34,11 @@ module.exports = {
         title,
         description,
         price,
-        category: { name: "test", id: 0, image: "x" },
+        category: {
+          name: NEWcategory.name,
+          id: NEWcategory.id,
+          image: NEWcategory.image,
+        },
         DisPercentage,
         stock,
         images: [imageUrl],
