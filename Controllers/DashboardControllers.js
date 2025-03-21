@@ -23,6 +23,10 @@ module.exports = {
       const ResIMGUR = await axios.post("https://api.imgur.com/3/image", form, {
         headers,
       });
+
+      if (!ResIMGUR || !ResIMGUR.data || !ResIMGUR.data.data.link) {
+        return res.status(500).json({ message: "Image upload failed" });
+      }
       const imageUrl = ResIMGUR.data.data.link;
 
       const MaxID = await Products.aggregate([
@@ -30,11 +34,12 @@ module.exports = {
           $group: { _id: null, id: { $max: "$id" } },
         },
       ]);
+      const newId = MaxID[0] ? MaxID[0].id + 1 : 1;
 
       const PriceAfterDisxx = Math.ceil(price - price * (DisPercentage / 100));
 
       const NewProduct = new Products({
-        id: MaxID[0].id + 1,
+        id: newId,
         title,
         description,
         price,

@@ -11,7 +11,7 @@ const upload = Multer({ storage: storage });
 DashBoardRouter.post(
   "/admin/product",
   Checkdb,
-  upload.single("image"),
+  upload.array("image", 5),
   CheckDataToPost,
   DashBoardControlers.PostProdcut
 );
