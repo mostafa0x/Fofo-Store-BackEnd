@@ -52,7 +52,6 @@ module.exports = {
     const { title, description, price, category, DisPercentage, stock, _id } =
       req.body;
     const imageUrls = req.images;
-    console.log(imageUrls);
 
     try {
       const NEWcategory = JSON.parse(category);
@@ -100,7 +99,7 @@ module.exports = {
       //  await NewProduct.save();
 
       return res.status(200).json({
-        message: "Product added successfully",
+        message: "Product updated successfully",
         product: Pro,
       });
     } catch (err) {
