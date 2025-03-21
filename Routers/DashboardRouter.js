@@ -11,7 +11,7 @@ DashBoardRouter.post(
   "/admin/product",
   upload.single("image"),
   Checkdb,
-  DashBoardControlers.AddProduct
+  DashBoardControlers.PostProdcut
 );
 
 module.exports = DashBoardRouter;

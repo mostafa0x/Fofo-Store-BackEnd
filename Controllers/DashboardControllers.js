@@ -1,4 +1,3 @@
-const Multer = require("multer");
 const axios = require("axios");
 const formdata = require("form-data");
 const Products = require("../Models/Models").DbProducts;
@@ -7,14 +6,14 @@ require("dotenv").config();
 const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID;
 
 module.exports = {
-  AddProduct: async (req, res) => {
+  PostProdcut: async (req, res) => {
     const { title, description, price, category, DisPercentage, stock } =
       req.body;
-    const NEWcategory = JSON.parse(category);
     try {
-      if (!req.file) {
+      if (!req.file || !title) {
         return res.status(400).json({ message: "file not found" });
       }
+      const NEWcategory = JSON.parse(category);
 
       const form = new formdata();
       form.append("image", req.file.buffer);
@@ -29,8 +28,14 @@ module.exports = {
       });
       const imageUrl = ResIMGUR.data.data.link;
 
+      const MaxID = await Products.aggregate([
+        {
+          $group: { _id: null, id: { $max: "$id" } },
+        },
+      ]);
+
       const NewProduct = new Products({
-        id: 99,
+        id: MaxID[0].id + 1,
         title,
         description,
         price,
