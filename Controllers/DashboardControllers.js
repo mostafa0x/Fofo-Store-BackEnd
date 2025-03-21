@@ -49,7 +49,6 @@ module.exports = {
         images: [imageUrl],
       });
       console.log(NewProduct);
-      //  NewProduct.DisPercentage = PriceAfterDisxx;
       await NewProduct.save();
 
       return res.status(200).json({
