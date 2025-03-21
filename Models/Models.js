@@ -28,7 +28,6 @@ const SchemaProducts = new mongoose.Schema({
   id: {
     type: Number,
     required: true,
-    
   },
   title: {
     type: String,
@@ -68,6 +67,9 @@ const SchemaProducts = new mongoose.Schema({
   DisPercentage: {
     type: Number,
     required: true,
+  },
+  priceAfterDis: {
+    type: Number,
   },
 });
 

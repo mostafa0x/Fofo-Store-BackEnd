@@ -3,10 +3,9 @@ async function TotalPriceItems(CartItems) {
   let Total = 0;
 
   VirtualCart.map((item) => {
-    itemPir = item.price - item.price * (item.DisPercentage / 100);
-    Total += itemPir * item.count;
+    Total += item.priceAfterDis * item.count;
   });
-  return Math.ceil(Total);
+  return Total;
 }
 
 module.exports = TotalPriceItems;

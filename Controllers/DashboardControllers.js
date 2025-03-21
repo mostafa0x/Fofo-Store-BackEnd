@@ -31,11 +31,14 @@ module.exports = {
         },
       ]);
 
+      const PriceAfterDisxx = Math.ceil(price - price * (DisPercentage / 100));
+
       const NewProduct = new Products({
         id: MaxID[0].id + 1,
         title,
         description,
         price,
+        priceAfterDis: PriceAfterDisxx,
         category: {
           name: NEWcategory.name,
           id: NEWcategory.id,
@@ -45,6 +48,8 @@ module.exports = {
         stock,
         images: [imageUrl],
       });
+      console.log(NewProduct);
+      //  NewProduct.DisPercentage = PriceAfterDisxx;
       await NewProduct.save();
 
       return res.status(200).json({
