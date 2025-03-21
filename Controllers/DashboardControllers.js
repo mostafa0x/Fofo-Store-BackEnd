@@ -1,5 +1,6 @@
 const axios = require("axios");
 const formdata = require("form-data");
+const { LoginTicket } = require("google-auth-library");
 const Products = require("../Models/Models").DbProducts;
 require("dotenv").config();
 
@@ -9,25 +10,34 @@ module.exports = {
   PostProdcut: async (req, res) => {
     const { title, description, price, category, DisPercentage, stock } =
       req.body;
+    files = req.files;
+    const imageUrls = [];
+
     try {
       const NEWcategory = JSON.parse(category);
 
-      const form = new formdata();
-      form.append("image", req.file.buffer);
+      for (let file of files) {
+        const form = new formdata();
+        form.append("image", file.buffer);
 
-      const headers = {
-        Authorization: `Client-ID ${IMGUR_CLIENT_ID}`,
-        ...form.getHeaders(),
-      };
+        const headers = {
+          Authorization: `Client-ID ${IMGUR_CLIENT_ID}`,
+          ...form.getHeaders(),
+        };
 
-      const ResIMGUR = await axios.post("https://api.imgur.com/3/image", form, {
-        headers,
-      });
+        const ResIMGUR = await axios.post(
+          "https://api.imgur.com/3/image",
+          form,
+          {
+            headers,
+          }
+        );
 
-      if (!ResIMGUR || !ResIMGUR.data || !ResIMGUR.data.data.link) {
-        return res.status(500).json({ message: "Image upload failed" });
+        if (!ResIMGUR || !ResIMGUR.data || !ResIMGUR.data.data.link) {
+          return res.status(500).json({ message: "Image upload failed" });
+        }
+        imageUrls.push(ResIMGUR.data.data.link);
       }
-      const imageUrl = ResIMGUR.data.data.link;
 
       const MaxID = await Products.aggregate([
         {
@@ -51,7 +61,7 @@ module.exports = {
         },
         DisPercentage,
         stock,
-        images: [imageUrl],
+        images: imageUrls,
       });
       console.log(NewProduct);
       await NewProduct.save();

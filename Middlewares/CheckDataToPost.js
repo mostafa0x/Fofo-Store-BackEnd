@@ -4,7 +4,7 @@ async function CheckDataToPost(req, res, next) {
 
   try {
     if (
-      !req.file ||
+      !req.files ||
       !title ||
       !description ||
       !price ||
