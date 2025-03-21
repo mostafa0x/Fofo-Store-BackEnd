@@ -28,6 +28,7 @@ const SchemaProducts = new mongoose.Schema({
   id: {
     type: Number,
     required: true,
+    
   },
   title: {
     type: String,
@@ -38,7 +39,7 @@ const SchemaProducts = new mongoose.Schema({
     required: true,
   },
   price: {
-    type: String,
+    type: Number,
     required: true,
   },
   category: {

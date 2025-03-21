@@ -10,9 +10,6 @@ module.exports = {
     const { title, description, price, category, DisPercentage, stock } =
       req.body;
     try {
-      if (!req.file || !title) {
-        return res.status(400).json({ message: "file not found" });
-      }
       const NEWcategory = JSON.parse(category);
 
       const form = new formdata();

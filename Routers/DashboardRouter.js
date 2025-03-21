@@ -3,14 +3,16 @@ const Checkdb = require("../Middlewares/CheckDB");
 const CheckToken = require("../Middlewares/CheckToken");
 const DashBoardControlers = require("../Controllers/DashboardControllers");
 const Multer = require("multer");
+const CheckDataToPost = require("../Middlewares/CheckDataToPost");
 
 const storage = Multer.memoryStorage();
 const upload = Multer({ storage: storage });
 
 DashBoardRouter.post(
   "/admin/product",
-  upload.single("image"),
   Checkdb,
+  upload.single("image"),
+  CheckDataToPost,
   DashBoardControlers.PostProdcut
 );
 
