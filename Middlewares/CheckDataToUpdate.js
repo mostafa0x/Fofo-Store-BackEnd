@@ -1,10 +1,10 @@
 async function CheckDataToPost(req, res, next) {
-  const { title, description, price, category, DisPercentage, stock } =
+  const { title, description, price, category, DisPercentage, stock, _id } =
     req.body;
 
   try {
     if (
-      !req.files ||
+      !_id ||
       !title ||
       !description ||
       !price ||
@@ -33,7 +33,6 @@ async function CheckDataToPost(req, res, next) {
           "The price & DisPercentage & stock  must not be less than zero.",
       });
     }
-
     if (DisPercentage > 100) {
       return res.status(400).json({
         message: "The DisPercentage  must not be than than 100.",
@@ -44,6 +43,7 @@ async function CheckDataToPost(req, res, next) {
         message: "Category error",
       });
     }
+
     next();
   } catch (err) {
     return res.status(500).json({ message: `Error ${err}` });

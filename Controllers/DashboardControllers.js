@@ -48,4 +48,63 @@ module.exports = {
       return res.status(500).json({ message: `Error ${err}` });
     }
   },
+  UpdateProdcut: async (req, res) => {
+    const { title, description, price, category, DisPercentage, stock, _id } =
+      req.body;
+    const imageUrls = req.images;
+    console.log(imageUrls);
+
+    try {
+      const NEWcategory = JSON.parse(category);
+
+      const PriceAfterDisxx = Math.ceil(price - price * (DisPercentage / 100));
+
+      const Pro = await Products.findByIdAndUpdate(
+        { _id: _id },
+        {
+          $set: {
+            title,
+            description,
+            price,
+            DisPercentage,
+            stock,
+            priceAfterDis: PriceAfterDisxx,
+            category: {
+              name: NEWcategory.name,
+              id: NEWcategory.id,
+              image: NEWcategory.image,
+            },
+          },
+          $push: {
+            images: { $each: imageUrls },
+          },
+        },
+        { new: true }
+      );
+
+      // const NewProduct = new Products({
+      //   id,
+      //   title,
+      //   description,
+      //   price,
+      //   priceAfterDis: PriceAfterDisxx,
+      //   category: {
+      //     name: NEWcategory.name,
+      //     id: NEWcategory.id,
+      //     image: NEWcategory.image,
+      //   },
+      //   DisPercentage,
+      //   stock,
+      //   images: imageUrls,
+      // });
+      //  await NewProduct.save();
+
+      return res.status(200).json({
+        message: "Product added successfully",
+        product: Pro,
+      });
+    } catch (err) {
+      return res.status(500).json({ message: `Error ${err}` });
+    }
+  },
 };
