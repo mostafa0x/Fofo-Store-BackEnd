@@ -25,7 +25,6 @@ An online product marketing project that includes a shopping cart where users ca
 - **routes/**: Contains Express route handlers for different endpoints like adding products, viewing products, managing the cart, etc.
 - **controllers/**: Contains the logic for each route, such as adding/removing items from the cart or managing products.
 - **middleware/**: Contains authentication middleware for securing routes that require Google authentication.
-- **config/**: Holds configuration files, such as database connection settings.
 
 ## Installation ⚙️
 
@@ -41,5 +40,4 @@ Make sure you have the following installed:
 1. **Clone the repository**:
 
    ```bash
-   git clone https://github.com/your-username/online-product-marketing.git
-   cd online-product-marketing
+   git clone https://github.com/mostafa0x/Fofo-Store-BackEnd.git
