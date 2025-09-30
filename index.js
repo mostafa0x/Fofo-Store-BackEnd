@@ -10,7 +10,7 @@ require("dotenv").config();
 const PORT = process.env.PORT || 8080;
 
 const corsOptions = {
-  origin: ["https://fofo-store.vercel.app", "http://localhost:3000","http://localhost:8081"],
+  origin: ["https://fofo-store.vercel.app", "http://localhost:3000","http://localhost:8081","exp://192.168.1.6:8081"],
   methods: "GET,POST,PUT,DELETE,PATCH",
   allowedHeaders: "Content-Type, Authorization",
 };
